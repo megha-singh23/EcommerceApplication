@@ -42,7 +42,7 @@ ecommerce-app/
 ## Prerequisites
 
 - Java 17+ and Maven 3.8+
-- MySQL 8.x running locally
+- MySQL 8.x
 
 ## 1. Set up MySQL
 
@@ -78,8 +78,6 @@ The API starts on `http://localhost:8080`. On first startup it prints:
 ```
 >>> Default admin created: username='admin' password='Admin@123'
 ```
-
-**Change this password immediately** if this is anything beyond a local demo.
 
 ### Key endpoints
 

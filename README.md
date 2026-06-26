@@ -139,10 +139,3 @@ as the API).
   security control — that's why every admin write endpoint is also
   annotated with `@PreAuthorize("hasRole('ADMIN')")` in addition to the
   path-based rule in `SecurityConfig`.
-
-## Extending this further
-
-Natural next steps if you want to keep building: payment integration
-(Stripe), product image uploads instead of URLs, email verification on
-signup, refresh tokens (current tokens just expire after 24h), pagination
-controls in the UI for large catalogs, and product reviews/ratings.

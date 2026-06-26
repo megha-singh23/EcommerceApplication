@@ -1,4 +1,4 @@
-//---------Categories------------------
+
 INSERT INTO categories (id, description, name) VALUES
 (1, 'Everyday gadgets and accessories.', 'Electronics'),
 (2, 'Tools and essentials for the kitchen and home.', 'Home & Kitchen'),
@@ -6,7 +6,7 @@ INSERT INTO categories (id, description, name) VALUES
 (4, 'Paperbacks, guides, and journals.', 'Books'),
 (5, 'Gear for getting outside and staying active.', 'Sports & Outdoors');
 
-//------------Products---------------------
+
 INSERT INTO products
 (id, created_at, description, image_url, name, price, stock_quantity, updated_at, category_id)
 VALUES

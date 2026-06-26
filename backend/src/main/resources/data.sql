@@ -1,10 +1,3 @@
-INSERT INTO categories (id, description, name) VALUES
-(1, 'Everyday gadgets and accessories.', 'Electronics'),
-(2, 'Tools and essentials for the kitchen and home.', 'Home & Kitchen'),
-(3, 'Clothing and everyday wear.', 'Apparel'),
-(4, 'Paperbacks, guides, and journals.', 'Books'),
-(5, 'Gear for getting outside and staying active.', 'Sports & Outdoors');
-
 INSERT INTO products
 (created_at, description, image_url, name, price, stock_quantity, updated_at, category_id)
 VALUES
@@ -27,3 +20,10 @@ VALUES
 (CURRENT_TIMESTAMP, '34oz French press for a full-bodied morning brew.',
 'https://images.unsplash.com/photo-1708127368781-cd5f069a90a5?w=600&h=600&fit=crop',
 'Stainless Steel French Press', 34.99, 50, CURRENT_TIMESTAMP, 2);
+
+INSERT INTO categories (id, description, name) VALUES
+(1, 'Everyday gadgets and accessories.', 'Electronics'),
+(2, 'Tools and essentials for the kitchen and home.', 'Home & Kitchen'),
+(3, 'Clothing and everyday wear.', 'Apparel'),
+(4, 'Paperbacks, guides, and journals.', 'Books'),
+(5, 'Gear for getting outside and staying active.', 'Sports & Outdoors');

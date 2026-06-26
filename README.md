@@ -42,7 +42,7 @@ ecommerce-app/
 ## Prerequisites
 
 - Java 17+ and Maven 3.8+
-- MySQL 8.x running locally
+- MySQL 8.x
 
 ## 1. Set up MySQL
 
@@ -79,8 +79,6 @@ The API starts on `http://localhost:8080`. On first startup it prints:
 >>> Default admin created: username='admin' password='Admin@123'
 ```
 
-**Change this password immediately** if this is anything beyond a local demo.
-
 ### Key endpoints
 
 | Method | Path | Access |
@@ -103,16 +101,6 @@ npm install
 npm run dev
 ```
 
-Open `http://localhost:3000`. The dev server proxies `/api` calls to
-`http://localhost:8080` (see `vite.config.js`), so no extra CORS setup is
-needed locally. The backend's `SecurityConfig` also allows any
-`http://localhost:*` origin for when you run the frontend on a different
-port.
-
-To build a production bundle: `npm run build` (outputs to `frontend/dist`,
-which you can serve from any static host or behind the same reverse proxy
-as the API).
-
 ## Trying it out
 
 1. Register a normal account, or log in as `admin` / `Admin@123`.
@@ -124,7 +112,7 @@ as the API).
 4. Back in **Admin → Orders**, update the order's status; the customer
    will see the updated status next time they open **Orders**.
 
-## Notes on the JWT/role-based design
+## The JWT/role-based design
 
 - Passwords are hashed with BCrypt (`spring-security-crypto`), never stored
   or logged in plaintext.
@@ -134,8 +122,11 @@ as the API).
   without waiting for token expiry.
 - The filter chain is stateless (`SessionCreationPolicy.STATELESS`) — no
   server-side session, which is what makes this safe to scale horizontally.
+<<<<<<< HEAD
 - On the frontend, route guards are a UX convenience only; the real
   enforcement is server-side. Don't rely on hiding a button as your only
   security control — that's why every admin write endpoint is also
   annotated with `@PreAuthorize("hasRole('ADMIN')")` in addition to the
   path-based rule in `SecurityConfig`.
+=======
+>>>>>>> f7b0ec9b6eb63bf48ca30af1cfb73888fe6949b9

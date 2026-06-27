@@ -13,18 +13,18 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query(value = """
             SELECT * FROM products p
-            WHERE (:keyword IS NULL OR
-                   LOWER(p.name::text) LIKE LOWER(CONCAT('%', :keyword::text, '%')) OR
-                   LOWER(p.description::text) LIKE LOWER(CONCAT('%', :keyword::text, '%')))
-            AND (:categoryId IS NULL OR p.category_id = :categoryId)
+            WHERE (CAST(:keyword AS text) IS NULL OR
+                   LOWER(CAST(p.name AS text)) LIKE LOWER(CONCAT('%', CAST(:keyword AS text), '%')) OR
+                   LOWER(CAST(p.description AS text)) LIKE LOWER(CONCAT('%', CAST(:keyword AS text), '%')))
+            AND (CAST(:categoryId AS bigint) IS NULL OR p.category_id = CAST(:categoryId AS bigint))
             ORDER BY p.id DESC
             """,
             countQuery = """
             SELECT COUNT(*) FROM products p
-            WHERE (:keyword IS NULL OR
-                   LOWER(p.name::text) LIKE LOWER(CONCAT('%', :keyword::text, '%')) OR
-                   LOWER(p.description::text) LIKE LOWER(CONCAT('%', :keyword::text, '%')))
-            AND (:categoryId IS NULL OR p.category_id = :categoryId)
+            WHERE (CAST(:keyword AS text) IS NULL OR
+                   LOWER(CAST(p.name AS text)) LIKE LOWER(CONCAT('%', CAST(:keyword AS text), '%')) OR
+                   LOWER(CAST(p.description AS text)) LIKE LOWER(CONCAT('%', CAST(:keyword AS text), '%')))
+            AND (CAST(:categoryId AS bigint) IS NULL OR p.category_id = CAST(:categoryId AS bigint))
             """,
             nativeQuery = true)
     Page<Product> search(@Param("keyword") String keyword,

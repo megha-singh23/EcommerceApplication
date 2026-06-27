@@ -11,9 +11,23 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     Page<Product> findByCategoryId(Long categoryId, Pageable pageable);
 
-    @Query("SELECT p FROM Product p WHERE " +
-            "(:keyword IS NULL OR LOWER(p.name) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
-            "OR LOWER(p.description) LIKE LOWER(CONCAT('%', :keyword, '%'))) " +
-            "AND (:categoryId IS NULL OR p.category.id = :categoryId)")
-    Page<Product> search(@Param("keyword") String keyword, @Param("categoryId") Long categoryId, Pageable pageable);
+    @Query(value = """
+            SELECT * FROM products p
+            WHERE (:keyword IS NULL OR
+                   LOWER(p.name::text) LIKE LOWER(CONCAT('%', :keyword::text, '%')) OR
+                   LOWER(p.description::text) LIKE LOWER(CONCAT('%', :keyword::text, '%')))
+            AND (:categoryId IS NULL OR p.category_id = :categoryId)
+            ORDER BY p.id DESC
+            """,
+            countQuery = """
+            SELECT COUNT(*) FROM products p
+            WHERE (:keyword IS NULL OR
+                   LOWER(p.name::text) LIKE LOWER(CONCAT('%', :keyword::text, '%')) OR
+                   LOWER(p.description::text) LIKE LOWER(CONCAT('%', :keyword::text, '%')))
+            AND (:categoryId IS NULL OR p.category_id = :categoryId)
+            """,
+            nativeQuery = true)
+    Page<Product> search(@Param("keyword") String keyword,
+                         @Param("categoryId") Long categoryId,
+                         Pageable pageable);
 }

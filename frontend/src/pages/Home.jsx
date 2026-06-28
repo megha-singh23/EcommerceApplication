@@ -18,11 +18,19 @@ export default function Home() {
   const [spotlightIndex, setSpotlightIndex] = useState(0)
   const [paused, setPaused] = useState(false)
 
-  useEffect(() => {
-    api.get('/categories').then((res) => setCategories(res.data)).catch(() => {})
-  }, [])
+  
+useEffect(() => {
+  api.get('/categories')
+    .then((res) => {
+     
+      const data = res?.data ?? res
+      setCategories(Array.isArray(data) ? data : [])
+    })
+    .catch(() => setCategories([]))
+}, [])
 
-  const loadProducts = useCallback(async () => {
+
+const loadProducts = useCallback(async () => {
   setLoading(true)
   setError('')
   try {
@@ -31,11 +39,13 @@ export default function Home() {
     if (categoryId) params.categoryId = categoryId
     const res = await api.get('/products', { params })
 
-    setProducts(res.data.content || [])
+    const data = res?.data ?? res
+    const items = Array.isArray(data) ? data : (data?.content ?? [])
+    setProducts(items)
 
   } catch (err) {
     setError('Failed to load products')
-    setProducts([]) 
+    setProducts([])
   } finally {
     setLoading(false)
   }

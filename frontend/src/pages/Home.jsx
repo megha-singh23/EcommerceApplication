@@ -23,21 +23,23 @@ export default function Home() {
   }, [])
 
   const loadProducts = useCallback(async () => {
-    setLoading(true)
-    setError('')
-    try {
-      const params = { size: 40 }
-      if (keyword) params.keyword = keyword
-      if (categoryId) params.categoryId = categoryId
-      const res = await api.get('/products', { params })
-      setProducts(res.data.content)
-      setSpotlightIndex(0)
-    } catch {
-      setError('Could not load products. Is the backend running?')
-    } finally {
-      setLoading(false)
-    }
-  }, [keyword, categoryId])
+  setLoading(true)
+  setError('')
+  try {
+    const params = { size: 40 }
+    if (keyword) params.keyword = keyword
+    if (categoryId) params.categoryId = categoryId
+    const res = await api.get('/products', { params })
+
+    setProducts(res.data.content || [])
+
+  } catch (err) {
+    setError('Failed to load products')
+    setProducts([]) 
+  } finally {
+    setLoading(false)
+  }
+}, [keyword, categoryId])
 
   useEffect(() => {
     const t = setTimeout(loadProducts, 250)

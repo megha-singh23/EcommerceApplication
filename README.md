@@ -1,132 +1,268 @@
-# Shopora — Full-Stack E-Commerce App
+# Shopora — Full Stack E-Commerce Application
 
-Spring Boot + MySQL backend with JWT authentication and role-based access
-control, paired with a React (Vite) frontend.
+A full-stack e-commerce web application built with **React + Vite** on the frontend and **Spring Boot** on the backend, backed by a **PostgreSQL** database. Deployed on **Vercel** (frontend) and **Render** (backend + database).
+
+---
+
+## Live Demo
+
+| Layer | URL |
+|---|---|
+| **Frontend** | [ecommerce-application-eta-lemon.vercel.app](https://ecommerce-application-eta-lemon.vercel.app) |
+| **Backend API** | [ecommerceapplication-pkf7.onrender.com/api](https://ecommerceapplication-pkf7.onrender.com/api) |
+
+---
+
+## Features
+
+- JWT-based authentication (Register / Login)
+- Shopping cart with quantity management
+- Product search and category filtering
+- Product listing with pagination
+- User profile and order history
+- Admin panel for product & category management
+- Responsive design with Flowbite React components
+
+---
+
+## Tech Stack
+
+### Frontend
+| Technology | Purpose |
+|---|---|
+| React 18 | UI framework |
+| Vite | Build tool |
+| React Router DOM | Client-side routing |
+| Axios | HTTP requests |
+| Flowbite React | UI component library |
+| Tailwind CSS | Utility-first styling |
+| Context API | Global state management |
+
+### Backend
+| Technology | Purpose |
+|---|---|
+| Spring Boot 3 | REST API framework |
+| Spring Security | Authentication & authorization |
+| Spring Data JPA | Database ORM |
+| JWT (JSON Web Tokens) | Stateless authentication |
+| Hibernate | ORM implementation |
+| Maven | Dependency management |
+
+### Database & Deployment
+| Technology | Purpose |
+|---|---|
+| PostgreSQL | Relational database |
+| Render | Backend & database hosting |
+| Vercel | Frontend hosting |
+| Docker | Backend containerization |
+
+---
+
+## Project Structure
 
 ```
 ecommerce-app/
-├── backend/    Spring Boot 3 REST API (Java 17)
-└── frontend/   React 18 + Vite SPA
+├── frontend/                   # React + Vite app
+│   ├── public/
+│   ├── src/
+│   │   ├── api/
+│   │   │   └── axiosConfig.js  # Axios instance with interceptors
+│   │   ├── components/
+│   │   │   ├── Navbar.jsx
+│   │   │   ├── Footer.jsx
+│   │   │   ├── ProductCard.jsx
+│   │   │   ├── Loading.jsx
+│   │   │   ├── AdminLayout.jsx
+│   │   │   ├── AdminRoute.jsx
+│   │   │   └── PrivateRoute.jsx
+│   │   ├── context/
+│   │   │   ├── AuthContext.jsx
+│   │   │   └── CartContext.jsx
+│   │   ├── pages/
+│   │   │   ├── Home.jsx
+│   │   │   ├── Cart.jsx
+│   │   │   ├── Checkout.jsx
+│   │   │   ├── Login.jsx
+│   │   │   ├── Orders.jsx
+│   │   │   ├── NotFound.jsx
+│   │   │   └── admin/
+│   │   ├── App.jsx
+│   │   └── main.jsx
+│   ├── .env
+│   ├── .env.production
+│   ├── vercel.json
+│   └── package.json
+│
+├── backend/                    # Spring Boot app
+│   ├── src/main/java/com/ecommerce/
+│   │   ├── controller/
+│   │   ├── dto/
+│   │   ├── entity/
+│   │   ├── exception/
+│   │   ├── repository/
+│   │   ├── security/
+│   │   ├── service/
+│   │   └── EcommerceApplication.java
+│   ├── src/main/resources/
+│   │   └── application.properties
+│   ├── Dockerfile
+│   └── pom.xml
 ```
 
-## What's included
+---
 
-**Backend**
-- JWT-based authentication (register / login / `me`)
-- Role-based authorization: `ROLE_USER` and `ROLE_ADMIN`
-  (enforced both centrally in `SecurityConfig` and per-method with
-  `@PreAuthorize`)
-- Entities: `User`, `Role`, `Category`, `Product`, `Cart`, `CartItem`,
-  `Order`, `OrderItem`
-- Public endpoints: browse/search products and categories
-- Authenticated endpoints: cart management, placing orders, order history
-- Admin-only endpoints: full CRUD on products/categories, view all orders
-  and update their status, list users and enable/disable accounts
-- Global exception handling with consistent JSON error responses
-- A `DataInitializer` that seeds the `ROLE_USER`/`ROLE_ADMIN` roles and a
-  default admin account on first run
+## Getting Started Locally
 
-**Frontend**
-- Storefront: search/filter products, product detail page, cart, checkout,
-  order history
-- Auth pages with token persisted in `localStorage` and attached to every
-  request via an axios interceptor; expired/invalid tokens redirect to login
-- Route guards: `PrivateRoute` (must be logged in) and `AdminRoute`
-  (must have `ROLE_ADMIN`) — the admin nav link and its routes are
-  invisible/unreachable to ordinary shoppers
-- Admin dashboard: manage products, categories, orders (update status),
-  and users (enable/disable)
-- A custom design system (see `frontend/src/styles/global.css`) — no UI
-  framework, just CSS variables and hand-built components
+### Prerequisites
+- Java 17 or 21
+- Maven
+- PostgreSQL
 
-## Prerequisites
+---
 
-- Java 17+ and Maven 3.8+
-- MySQL 8.x
-
-## 1. Set up MySQL
-
-```sql
-CREATE DATABASE ecommerce_db;
-```
-
-The app will create tables automatically on first run
-(`spring.jpa.hibernate.ddl-auto=update`), so you only need the empty schema.
-
-## 2. Configure and run the backend
-
-Edit `backend/src/main/resources/application.properties` and set your own
-MySQL username/password and a long random `ecommerce.app.jwtSecret`
-(32+ characters). Don't commit real secrets — for production, override
-these with environment variables instead of editing the file directly:
+### 1. Clone the Repository
 
 ```bash
-export SPRING_DATASOURCE_USERNAME=youruser
-export SPRING_DATASOURCE_PASSWORD=yourpassword
-export ECOMMERCE_APP_JWTSECRET=$(openssl rand -base64 48)
+git clone https://github.com/megha-singh23/EcommerceApplication.git
+cd EcommerceApplication
 ```
 
-Then build and run:
+---
+
+### 2. Backend Setup
 
 ```bash
 cd backend
-mvn spring-boot:run
 ```
 
-The API starts on `http://localhost:8080`. On first startup it prints:
+Create `src/main/resources/application.properties`:
 
+```properties
+server.port=8080
+
+spring.datasource.url=jdbc:postgresql://localhost:5432/ecommerce_db
+spring.datasource.username=postgres
+spring.datasource.password=yourpassword
+spring.datasource.driver-class-name=org.postgresql.Driver
+
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+
+ecommerce.app.jwtSecret=your_jwt_secret_key_here
+ecommerce.app.jwtExpirationMs=86400000
+ecommerce.app.allowedOrigins=http://localhost:3000,http://localhost:5173
 ```
->>> Default admin created: username='admin' password='Admin@123'
+
+Run the backend:
+
+```bash
+./mvnw spring-boot:run
 ```
 
-### Key endpoints
+Backend will start at `http://localhost:8080`
 
-| Method | Path | Access |
-|---|---|---|
-| POST | `/api/auth/register` | public |
-| POST | `/api/auth/login` | public |
-| GET | `/api/auth/me` | authenticated |
-| GET | `/api/products`, `/api/categories` | public |
-| POST/PUT/DELETE | `/api/products/**`, `/api/categories/**` | ADMIN |
-| GET/POST/PUT/DELETE | `/api/cart/**` | authenticated |
-| POST/GET | `/api/orders` | authenticated |
-| PUT | `/api/orders/{id}/status` | ADMIN |
-| GET | `/api/admin/users`, `/api/admin/orders` | ADMIN |
+---
 
-## 3. Run the frontend
+### 3. Frontend Setup
 
 ```bash
 cd frontend
+```
+
+Create `.env` file:
+
+```env
+VITE_API_URL=http://localhost:8080/api
+```
+
+Install dependencies and start:
+
+```bash
 npm install
 npm run dev
 ```
 
-## Trying it out
+Frontend will start at `http://localhost:3000`
 
-1. Register a normal account, or log in as `admin` / `Admin@123`.
-2. As admin, go to **Admin → Categories** and **Admin → Products** to add
-   some inventory (an image URL is optional — products without one show a
-   placeholder).
-3. Log in as a regular user, browse the catalog, add items to the cart,
-   and place an order.
-4. Back in **Admin → Orders**, update the order's status; the customer
-   will see the updated status next time they open **Orders**.
+---
 
-## The JWT/role-based design
+## API Endpoints
 
-- Passwords are hashed with BCrypt (`spring-security-crypto`), never stored
-  or logged in plaintext.
-- JWTs are signed with HS256 and carry only the username as the subject;
-  authorities are re-loaded from the database on every request via
-  `UserDetailsServiceImpl`, so revoking a role takes effect immediately
-  without waiting for token expiry.
-- The filter chain is stateless (`SessionCreationPolicy.STATELESS`) — no
-  server-side session, which is what makes this safe to scale horizontally.
-<<<<<<< HEAD
-- On the frontend, route guards are a UX convenience only; the real
-  enforcement is server-side. Don't rely on hiding a button as your only
-  security control — that's why every admin write endpoint is also
-  annotated with `@PreAuthorize("hasRole('ADMIN')")` in addition to the
-  path-based rule in `SecurityConfig`.
-=======
->>>>>>> f7b0ec9b6eb63bf48ca30af1cfb73888fe6949b9
+### Auth
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/api/auth/register` | Register new user |
+| POST | `/api/auth/login` | Login and get JWT |
+
+### Products
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/api/products` | Get all products (paginated) |
+| GET | `/api/products?keyword=phone` | Search products |
+| GET | `/api/products?categoryId=1` | Filter by category |
+| GET | `/api/products/{id}` | Get product by ID |
+| POST | `/api/products` | Create product (Admin) |
+| PUT | `/api/products/{id}` | Update product (Admin) |
+| DELETE | `/api/products/{id}` | Delete product (Admin) |
+
+### Categories
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/api/categories` | Get all categories |
+| POST | `/api/categories` | Create category (Admin) |
+
+### Cart & Orders
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/api/cart` | Get user cart |
+| POST | `/api/cart` | Add item to cart |
+| DELETE | `/api/cart/{id}` | Remove item from cart |
+| POST | `/api/orders` | Place order |
+| GET | `/api/orders` | Get user orders |
+
+---
+
+## Environment Variables
+
+### Backend (Render)
+| Variable | Description |
+|---|---|
+| `DATABASE_URL` | JDBC PostgreSQL connection URL |
+| `DB_USERNAME` | Database username |
+| `DB_PASSWORD` | Database password |
+| `JWT_SECRET` | Secret key for JWT signing |
+| `ALLOWED_ORIGINS` | Comma-separated allowed CORS origins |
+
+### Frontend (Vercel)
+| Variable | Description |
+|---|---|
+| `VITE_API_URL` | Backend API base URL |
+
+---
+
+## Docker (Backend)
+
+```bash
+# Build image
+docker build -t shopora-backend .
+
+# Run container
+docker run -p 8080:8080 \
+  -e DATABASE_URL=jdbc:postgresql://localhost:5432/ecommerce_db \
+  -e DB_USERNAME=postgres \
+  -e DB_PASSWORD=yourpassword \
+  -e JWT_SECRET=your_secret \
+  -e ALLOWED_ORIGINS=http://localhost:5173 \
+  shopora-backend
+```
+
+---
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create your feature branch: `git checkout -b feature/my-feature`
+3. Commit your changes: `git commit -m 'Add my feature'`
+4. Push to the branch: `git push origin feature/my-feature`
+5. Open a Pull Request
